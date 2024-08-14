@@ -13,48 +13,48 @@ import net.minecraft.block.SoulFireBlock;
 import net.minecraft.util.shape.VoxelShapes;
 
 /**
- * 由 walaryne 修改自 Tanuki 的原始版本
+ * modified from Tanuki orignaly by walaryne
  */
 public class SafeFire extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> fire = sgGeneral.add(new BoolSetting.Builder()
             .name("fire")
-            .description("防止您踏入火焰。")
+            .description("Prevents you from walking into fire.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> soulFire = sgGeneral.add(new BoolSetting.Builder()
             .name("soul-fire")
-            .description("防止您踏入灵魂火焰。")
+            .description("Prevents you from walking into soul fire.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> campfire = sgGeneral.add(new BoolSetting.Builder()
             .name("campfire")
-            .description("防止您踏入普通篝火。")
+            .description("Prevents you from walking into normal campfires.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> soulCampfire = sgGeneral.add(new BoolSetting.Builder()
             .name("soul-campfire")
-            .description("防止您踏入灵魂篝火。")
+            .description("Prevents you from walking into soul campfires.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> lava = sgGeneral.add(new BoolSetting.Builder()
             .name("lava")
-            .description("防止您踏入熔岩。")
+            .description("Prevents you from walking into lava.")
             .defaultValue(false)
             .build()
     );
 
     public SafeFire() {
-        super(NumbyHack.CATEGORY, "safe-fire", "防止您踏入火焰。");
+        super(NumbyHack.CATEGORY, "safe-fire", "Prevents you from walking into fire.");
     }
 
     @EventHandler
@@ -80,3 +80,4 @@ public class SafeFire extends Module {
         }
     }
 }
+

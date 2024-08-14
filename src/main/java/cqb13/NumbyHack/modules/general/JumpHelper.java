@@ -17,7 +17,7 @@ public class JumpHelper extends Module {
 
     private final Setting<Boolean> alwaysShow = sgGeneral.add(new BoolSetting.Builder()
             .name("always-show")
-            .description("始终显示形状。")
+            .description("Always show the shape.")
             .defaultValue(false)
             .build());
 
@@ -28,21 +28,21 @@ public class JumpHelper extends Module {
 
     private final Setting<SettingColor> shapeColor = sgGeneral.add(new ColorSetting.Builder()
             .name("shape-color")
-            .description("形状渲染的颜色")
+            .description("Color for shape rendering")
             .defaultValue(new SettingColor(146, 188, 98, 255))
             .visible(() -> !useRainbow.get())
             .build());
 
     private final Setting<Double> shapeRadius = sgGeneral.add(new DoubleSetting.Builder()
             .name("shape-radius")
-            .description("形状的绘制大小。")
+            .description("How big the shape should be drawn.")
             .defaultValue(3.5)
             .min(0)
             .build());
 
     private final Setting<Boolean> makeItASphere = sgGeneral.add(new BoolSetting.Builder()
             .name("make-it-a-sphere")
-            .description("将形状制作成球体。")
+            .description("Make the shape a sphere.")
             .defaultValue(false)
             .build());
 
@@ -56,7 +56,7 @@ public class JumpHelper extends Module {
     );
 
     public JumpHelper() {
-        super(NumbyHack.CATEGORY, "jump-helper", "在跳跃时绘制形状以帮助移动。");
+        super(NumbyHack.CATEGORY, "jump-helper", "Draws a shape around you when you jump to help with movement.");
     }
 
     private double shapeResolution = 30;
@@ -113,6 +113,7 @@ public class JumpHelper extends Module {
             last = c;
         }
     }
+
 
     private void renderSphere(Render3DEvent event, double radius, int gradation, Vec3d pos) {
         float alpha, beta;

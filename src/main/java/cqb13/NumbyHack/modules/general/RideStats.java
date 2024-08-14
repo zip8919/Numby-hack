@@ -28,62 +28,62 @@ public class RideStats extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgEntities = settings.createGroup("Entities");
 
-    // 实体设置
+    // Entities
 
     private final Setting<Boolean> horse = sgEntities.add(new BoolSetting.Builder()
             .name("horses")
-            .description("在马的头上显示统计信息。")
+            .description("Display stats above horses.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> donkey = sgEntities.add(new BoolSetting.Builder()
             .name("donkeys")
-            .description("在驴的头上显示统计信息。")
+            .description("Display stats above donkeys.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> mule = sgEntities.add(new BoolSetting.Builder()
             .name("mules")
-            .description("在骡子的头上显示统计信息。")
+            .description("Display stats above mules.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> llama = sgEntities.add(new BoolSetting.Builder()
             .name("llamas")
-            .description("在羊驼的头上显示统计信息。")
+            .description("Display stats above llamas.")
             .defaultValue(true)
             .build()
     );
 
-    // 一般设置
+    // General
 
     private final Setting<Boolean> displaySpeed = sgGeneral.add(new BoolSetting.Builder()
             .name("display-max-speed")
-            .description("显示实体的最大速度。")
+            .description("Display the entity's max speed.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> displayJumpHeight = sgGeneral.add(new BoolSetting.Builder()
             .name("display-max-jump-height")
-            .description("显示实体的最大跳跃高度。")
+            .description("Display the entity's max jump height.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> displayHealth = sgGeneral.add(new BoolSetting.Builder()
             .name("display-max-health")
-            .description("显示实体的最大生命值。")
+            .description("Display the entity's max health.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> displayInventorySlots = sgGeneral.add(new BoolSetting.Builder()
             .name("display-llama-slots")
-            .description("显示羊驼的库存槽位。")
+            .description("Display the llama's inventory slots.")
             .defaultValue(true)
             .visible(llama::get)
             .build()
@@ -91,7 +91,7 @@ public class RideStats extends Module {
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
             .name("scale")
-            .description("名牌的缩放比例。")
+            .description("The scale of the nametag.")
             .defaultValue(1.5)
             .min(0.1)
             .build()
@@ -99,7 +99,7 @@ public class RideStats extends Module {
 
     private final Setting<Double> height = sgGeneral.add(new DoubleSetting.Builder()
             .name("height")
-            .description("名牌显示在实体头上方的高度。")
+            .description("How high above entities' heads to display it.")
             .defaultValue(1)
             .sliderMax(3)
             .build()
@@ -107,20 +107,20 @@ public class RideStats extends Module {
 
     private final Setting<SettingColor> entityNameColor = sgGeneral.add(new ColorSetting.Builder()
             .name("name-color")
-            .description("实体名称的颜色。")
+            .description("What color the entity's name is.")
             .defaultValue(new SettingColor())
             .build()
     );
 
     private final Setting<SettingColor> backgroundColor = sgGeneral.add(new ColorSetting.Builder()
             .name("background-color")
-            .description("名牌背景的颜色。")
+            .description("What color the background of the nametag is.")
             .defaultValue(new SettingColor(0, 0, 0, 75))
             .build()
     );
 
     public RideStats() {
-        super(NumbyHack.CATEGORY, "ride-stats", "在可骑乘实体的头上显示信息。");
+        super(NumbyHack.CATEGORY, "ride-stats", "Displays information above rideable entity's heads.");
     }
 
     @EventHandler
@@ -149,28 +149,28 @@ public class RideStats extends Module {
         NametagUtils.begin(pos);
         text.beginBig();
 
-        // 名称
+        // Name
         String name;
         name = horseEntity.getType().getName().getString();
 
-        // 生命值
+        // Health
         double health = horseEntity.getMaxHealth();
         String healthText = " " + String.format("%.1f", health).replace(".", ",");
 
-        // 速度
+        // Speed
         double speed = genericSpeedToBlockPerSecond(horseEntity.getAttributes().getBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
         String speedText = " " + String.format("%.1f", speed).replace(".", ",") + " bps";
 
-        // 跳跃
+        // Jump
         double maxJump = jumpStrengthToJumpHeight(horseEntity.getAttributes().getBaseValue(EntityAttributes.GENERIC_JUMP_STRENGTH));
         String maxJumpText = " " + String.format("%.1f", maxJump).replace(".", ",") + "m";
 
-        // 库存槽位
+        // Inv Slots
         int invSlots = 0;
         if (llama) invSlots = ((LlamaEntity) entity).getInventoryColumns() * 3;
         String invSlotsText = " " + invSlots + " slots";
 
-        // 宽度计算
+        // Widths
         double nameWidth = text.getWidth(name, true);
         double healthWidth = text.getWidth(healthText, true);
         double speedWidth = text.getWidth(speedText, true);
@@ -188,7 +188,7 @@ public class RideStats extends Module {
 
         drawBg(-widthHalf, -heightDown, width, heightDown);
 
-        // 渲染文本
+        // Render texts
         double hX = -widthHalf;
         double hY = -heightDown;
 

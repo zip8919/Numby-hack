@@ -18,66 +18,65 @@ import net.minecraft.client.network.PlayerListEntry;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 /**
- * 由 cqb13 制作
+ * made by cqb13
  */
 public class AutoLogPlus extends Module {
-    private final SettingGroup sgTimeLog = settings.createGroup("时间登出");
-    private final SettingGroup sgLocationLog = settings.createGroup("位置登出");
-    private final SettingGroup sgPingLog = settings.createGroup("延迟登出");
+    private final SettingGroup sgTimeLog = settings.createGroup("Time Log");
+    private final SettingGroup sgLocationLog = settings.createGroup("Location Log");
+    private final SettingGroup sgPingLog = settings.createGroup("Ping Log");
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-    // 时间登出
+    // time log
     private final Setting<Boolean> timeLog = sgTimeLog.add(new BoolSetting.Builder()
-            .name("时间登出")
-            .description("在一定时间后自动登出。")
+            .name("time-log")
+            .description("Logs you out after a certain amount of time.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<String> logTime = sgTimeLog.add(new StringSetting.Builder()
-            .name("时间")
-            .description("登出的时间（使用24小时制）。")
+            .name("time")
+            .description("The time to log you out (uses 24 hour time).")
             .defaultValue("12:00")
             .visible(timeLog::get)
             .build()
     );
 
-    // 位置登出
+    // location log
     private final Setting<Boolean> locationLog = sgLocationLog.add(new BoolSetting.Builder()
-            .name("位置登出")
-            .description("到达设定坐标时断开连接。")
+            .name("location-log")
+            .description("Disconnects when a you reach set coordinates.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> oneAxis = sgLocationLog.add(new BoolSetting.Builder()
-            .name("单轴登出")
-            .description("在特定轴上到达设定坐标时断开连接。")
+            .name("one-axis-log")
+            .description("Disconnects when a you reach set coordinates on a specific axis.")
             .defaultValue(false)
             .visible(locationLog::get)
             .build()
     );
 
     private final Setting<axisOptions> selectAxis = sgLocationLog.add(new EnumSetting.Builder<axisOptions>()
-            .name("选择轴")
-            .description("具有确切登出坐标的轴。")
+            .name("select-axis")
+            .description("The axis with the exact log coords.")
             .defaultValue(axisOptions.X)
             .visible(oneAxis::get)
             .build()
     );
 
     private final Setting<Dimension> dimension = sgLocationLog.add(new EnumSetting.Builder<Dimension>()
-            .name("维度")
-            .description("坐标的维度。")
+            .name("dimension")
+            .description("Dimension for the coords.")
             .defaultValue(Dimension.Nether)
             .visible(locationLog::get)
             .build());
 
     private final Setting<Integer> xCoords = sgLocationLog.add(new IntSetting.Builder()
-            .name("X坐标")
-            .description("应该登出的X坐标。")
+            .name("x-coords")
+            .description("The X coords it should log you out.")
             .defaultValue(0)
             .range(-2147483648, 2147483647)
             .sliderRange(-2147483648, 2147483647)
@@ -85,8 +84,8 @@ public class AutoLogPlus extends Module {
             .build());
 
     private final Setting<Integer> zCoords = sgLocationLog.add(new IntSetting.Builder()
-            .name("Z坐标")
-            .description("应该登出的Z坐标。")
+            .name("z-coords")
+            .description("The Z coords it should log you out.")
             .defaultValue(-1000)
             .range(-2147483648, 2147483647)
             .sliderRange(-2147483648, 2147483647)
@@ -94,24 +93,24 @@ public class AutoLogPlus extends Module {
             .build());
 
     private final Setting<Integer> radius = sgLocationLog.add(new IntSetting.Builder()
-            .name("半径")
-            .description("从确切坐标到登出坐标的半径。")
+            .name("radius")
+            .description("The radius of coords from the exact coords it will log you out.")
             .defaultValue(64)
             .min(0)
             .sliderRange(0, 256)
             .visible(locationLog::get)
             .build());
 
-    // 延迟登出
+    // ping log
     private final Setting<Boolean> pingLog = sgPingLog.add(new BoolSetting.Builder()
-            .name("延迟登出")
-            .description("当你的延迟超过一定值时断开连接。")
+            .name("ping-log")
+            .description("Disconnects when your ping is above a certain value.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Integer> pingValue = sgPingLog.add(new IntSetting.Builder()
-            .name("延迟值")
+            .name("ping-value")
             .defaultValue(1000)
             .range(0, 10000)
             .sliderRange(0, 10000)
@@ -119,30 +118,30 @@ public class AutoLogPlus extends Module {
             .build()
     );
 
-    // 普通登出
+    // normal log
     private final Setting<Boolean> onlyTrusted = sgGeneral.add(new BoolSetting.Builder()
-            .name("敌人")
-            .description("当渲染距离内出现不在好友列表中的玩家时断开连接。")
+            .name("enemy")
+            .description("Disconnects when a player not on your friends list appears in render distance.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> toggleAutoReconnect = sgGeneral.add(new BoolSetting.Builder()
-            .name("切换自动重连")
-            .description("断开连接时关闭自动重连。")
+            .name("toggle-auto-reconnect")
+            .description("Turns off auto reconnect when disconnecting.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> toggleOff = sgGeneral.add(new BoolSetting.Builder()
-            .name("切换关闭")
-            .description("使用后禁用时间登出。")
+            .name("toggle-off")
+            .description("Disables Time Log after usage.")
             .defaultValue(true)
             .build()
     );
 
     public AutoLogPlus() {
-        super(NumbyHack.CATEGORY, "auto-log+", "当达到特定条件时断开连接。");
+        super(NumbyHack.CATEGORY, "auto-log+", "Disconnects you when a specific condition is reached.");
     }
 
     @EventHandler
@@ -155,44 +154,45 @@ public class AutoLogPlus extends Module {
         locationLog();
     }
 
-    // 不良玩家登出
+    // bad player log
     private void playerLog() {
         for (Entity entity : mc.world.getEntities()) {
             if (entity instanceof PlayerEntity && entity.getUuid() != mc.player.getUuid()) {
                 if (onlyTrusted.get() && entity != mc.player && !Friends.get().isFriend((PlayerEntity) entity)) {
-                    disconnect(Text.of("[Auto Log+] 一名不受信任的玩家 [" + entity.getName().getString() + "] 已进入你的渲染距离。"));
+                    disconnect(Text.of("[Auto Log+] A non trusted player ["+ entity.getName().getString() +"] has entered your render distance."));
                 }
             }
+
         }
     }
 
-    // 时间登出
+    // time log
     private void timeLog() {
         if (timeLog.get()) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
             LocalDateTime now = LocalDateTime.now();
             if (dtf.format(now).equals(logTime.get())) {
-                disconnect(Text.of("[Auto Log+] 登出时间已到 " + logTime.get() + "。"));
+                disconnect(Text.of("[Auto Log+] Log time has been reached " + logTime.get() + "."));
             }
         }
     }
 
-    // 位置登出
+    // location log
     private void locationLog() {
         if (locationLog.get() && PlayerUtils.getDimension() == dimension.get()) {
             if (xCoordsMatch() && zCoordsMatch()) {
-                disconnect(Text.of("[Auto Log+] 你已到达目的地。"));
+                disconnect(Text.of("[Auto Log+] You have reached your destination."));
             } else if (oneAxis.get()) {
                 if (selectAxis.get() == axisOptions.X && xCoordsMatch()) {
-                    disconnect(Text.of("[Auto Log+] 你已到达目的地。"));
+                    disconnect(Text.of("[Auto Log+] You have reached your destination."));
                 } else if (selectAxis.get() == axisOptions.Z && zCoordsMatch()) {
-                    disconnect(Text.of("[Auto Log+] 你已到达目的地。"));
+                    disconnect(Text.of("[Auto Log+] You have reached your destination."));
                 }
             }
         }
     }
 
-    // 延迟登出
+    // ping log
     private void disconnectOnHighPing() {
         if (!pingLog.get()) return;
         if (mc.getNetworkHandler() == null || mc.player == null) return;
@@ -200,7 +200,7 @@ public class AutoLogPlus extends Module {
 
         int ping = playerListEntry.getLatency();
 
-        if (ping >= pingValue.get()) disconnect(Text.of("[Auto Log+] 高延迟 [" + ping + "]"));
+        if (ping >= pingValue.get()) disconnect(Text.of("[Auto Log+] High ping [" + ping + "]"));
     }
 
     private boolean xCoordsMatch() {
@@ -211,7 +211,7 @@ public class AutoLogPlus extends Module {
         return (mc.player.getZ() <= zCoords.get() + radius.get() && mc.player.getZ() >= zCoords.get() - radius.get());
     }
 
-    private void disconnect(Text text) {
+    private void disconnect(Text text){
         if (mc.getNetworkHandler() == null) return;
         mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(text));
 

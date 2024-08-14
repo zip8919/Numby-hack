@@ -8,101 +8,101 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 
 /**
- * 由 cqb13 制作
+ * made by cqb13
  */
 public class GameSettings extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> hudHidden = sgGeneral.add(new BoolSetting.Builder()
-            .name("隐藏HUD")
-            .description("隐藏你的HUD。")
+            .name("hide-HUD")
+            .description("Hide your HUD.")
             .defaultValue(mc.options.hudHidden)
             .onChanged(this::toggleHUD)
             .build()
     );
 
     private final Setting<Boolean> pauseOnLostFocus = sgGeneral.add(new BoolSetting.Builder()
-            .name("失去焦点时暂停")
-            .description("当游戏失去焦点时暂停。")
+            .name("pause-on-lost-focus")
+            .description("Pauses the game when it is not focussed.")
             .defaultValue(mc.options.pauseOnLostFocus)
             .onChanged(this::togglePauseOnLostFocus)
             .build()
     );
 
     private final Setting<Boolean> skipMultiplayerWarning = sgGeneral.add(new BoolSetting.Builder()
-            .name("跳过多人游戏警告")
-            .description("跳过多人游戏警告。")
+            .name("skip-multiplayer-warning")
+            .description("Skips the Multiplayer warning.")
             .defaultValue(mc.options.skipMultiplayerWarning)
             .onChanged(this::toggleSkipMultiplayerWarning)
             .build()
     );
 
     private final Setting<Boolean> smoothCameraEnabled = sgGeneral.add(new BoolSetting.Builder()
-            .name("平滑摄像机")
-            .description("平滑的摄像机移动。")
+            .name("cinematic-camera")
+            .description("Smooth camera movement.")
             .defaultValue(mc.options.smoothCameraEnabled)
             .onChanged(this::toggleSmoothCamera)
             .build()
     );
 
     private final Setting<Boolean> advancedTooltips = sgGeneral.add(new BoolSetting.Builder()
-            .name("高级提示")
-            .description("在你的物品栏中显示更多信息。")
+            .name("advanced-tooltips")
+            .description("More information on items in your inventory.")
             .defaultValue(mc.options.advancedItemTooltips)
             .onChanged(this::toggleAdvancedTooltips)
             .build()
     );
 
     private final Setting<Boolean> hideScore = sgGeneral.add(new BoolSetting.Builder()
-            .name("隐藏分数")
-            .description("死亡时隐藏分数。")
+            .name("hide-score")
+            .description("Hides the score when you die.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> chatFeedback = sgGeneral.add(new BoolSetting.Builder()
-            .name("聊天反馈")
-            .description("在聊天中发送更新。")
+            .name("chat-feedback")
+            .description("Sends updates in the chat.")
             .defaultValue(true)
             .build()
     );
 
     public GameSettings() {
-        super(NumbyHack.CATEGORY, "game-settings", "便于访问Minecraft的设置并添加一些调整。");
+        super(NumbyHack.CATEGORY, "game-settings", "Allows for easier access to Minecraft's settings and adds some tweaks.");
     }
 
     private void toggleHUD(Boolean b) {
         mc.options.hudHidden = b;
-        sendChatInfo("HUD", b ? "隐藏" : "显示");
+        sendChatInfo("HUD", b ? "hidden" : "shown");
     }
 
     private void togglePauseOnLostFocus(Boolean b) {
         mc.options.pauseOnLostFocus = b;
-        sendChatInfo("失去焦点时暂停", b ? "启用" : "禁用");
+        sendChatInfo("Pause on Lost Focus", b ? "enabled" : "disabled");
     }
 
     private void toggleSkipMultiplayerWarning(Boolean b) {
         mc.options.skipMultiplayerWarning = b;
-        sendChatInfo("跳过多人游戏警告", b ? "启用" : "禁用");
+        sendChatInfo("Skip Multiplayer Warning", b ? "enabled" : "disabled");
     }
 
     private void toggleSmoothCamera(Boolean b) {
         mc.options.smoothCameraEnabled = b;
-        sendChatInfo("平滑摄像机", b ? "启用" : "禁用");
+        sendChatInfo("Smooth Camera", b ? "enabled" : "disabled");
     }
 
     private void toggleAdvancedTooltips(Boolean b) {
         mc.options.advancedItemTooltips = b;
-        sendChatInfo("高级提示", b ? "启用" : "禁用");
+        sendChatInfo("Advanced Tooltips", b ? "enabled" : "disabled");
     }
 
     public boolean toggleHideScore() {
-        sendChatInfo("隐藏分数", hideScore.get() ? "启用" : "禁用");
+        sendChatInfo("Hide Score", hideScore.get() ? "enabled" : "disabled");
         return isActive() && hideScore.get();
     }
 
     private void sendChatInfo(String setting, String value) {
         if (!chatFeedback.get()) return;
-        ChatUtils.info("将 %s 设置为 %s。", setting, value);
+        ChatUtils.info("Set %s to %s.", setting, value);
     }
 }

@@ -15,8 +15,8 @@ public class WurstGlide extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<Double> fallSpeed = sgGeneral.add(new DoubleSetting.Builder()
-            .name("下落速度")
-            .description("下落速度。")
+            .name("fall-speed")
+            .description("Fall speed.")
             .defaultValue(0.125)
             .min(0.005)
             .sliderRange(0.005, 0.25)
@@ -24,8 +24,8 @@ public class WurstGlide extends Module {
     );
 
     public final Setting<Double> moveSpeed = sgGeneral.add(new DoubleSetting.Builder()
-            .name("移动速度")
-            .description("水平移动系数。")
+            .name("move-speed")
+            .description("Horizontal movement factor.")
             .defaultValue(1.2)
             .min(1)
             .sliderRange(1, 5)
@@ -33,8 +33,8 @@ public class WurstGlide extends Module {
     );
 
     public final Setting<Double> minHeight = sgGeneral.add(new DoubleSetting.Builder()
-            .name("最小高度")
-            .description("当您离地面太近时，将不会滑翔。")
+            .name("min-height")
+            .description("Won't glide when you are too close to the ground.")
             .defaultValue(0)
             .min(0)
             .sliderRange(0, 2)
@@ -42,7 +42,7 @@ public class WurstGlide extends Module {
     );
 
     public WurstGlide() {
-        super(NumbyHack.CATEGORY, "wurst-glide", "来自Wurst的滑翔");
+        super(NumbyHack.CATEGORY, "wurst-glide", "Glide from wurst");
     }
 
     @EventHandler

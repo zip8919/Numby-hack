@@ -29,11 +29,11 @@ import net.minecraft.util.math.Direction;
 
 public class BonemealAura extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
-    private final SettingGroup sgRender = settings.createGroup("渲染");
+    private final SettingGroup sgRender = settings.createGroup("Render");
 
     private final Setting<Integer> horizontalRange = sgGeneral.add(new IntSetting.Builder()
-            .name("水平范围")
-            .description("玩家周围施肥的范围。")
+            .name("horizontal-range")
+            .description("How far around the player to bonemeal.")
             .defaultValue(4)
             .min(1)
             .sliderRange(1, 6)
@@ -41,37 +41,38 @@ public class BonemealAura extends Module {
     );
 
     private final Setting<Integer> verticalRange = sgGeneral.add(new IntSetting.Builder()
-            .name("垂直范围")
-            .description("玩家上方施肥的高度。")
+            .name("vertical-range")
+            .description("How high above the player to bonemeal.")
             .defaultValue(2)
             .min(1)
             .sliderRange(1, 6)
             .build()
     );
 
+
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-            .name("形状模式")
-            .description("形状的渲染方式。")
+            .name("shape-mode")
+            .description("How the shapes are rendered.")
             .defaultValue(ShapeMode.Both)
             .build()
     );
 
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-            .name("侧面颜色")
-            .description("目标方块渲染的侧面颜色。")
+            .name("side-color")
+            .description("The side color of the target block rendering.")
             .defaultValue(new SettingColor(146,188,98, 75))
             .build()
     );
 
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-            .name("线条颜色")
-            .description("目标方块渲染的线条颜色。")
+            .name("line-color")
+            .description("The line color of the target block rendering.")
             .defaultValue(new SettingColor(146,188,98, 190))
             .build()
     );
 
     public BonemealAura() {
-        super(NumbyHack.CATEGORY, "bonemeal-aura", "自动在玩家周围施肥作物");
+        super(NumbyHack.CATEGORY, "bonemeal-aura", "Automatically bonemeal crops around the player");
     }
 
     public boolean isBonemealing;
@@ -89,6 +90,7 @@ public class BonemealAura extends Module {
             isBonemealing = false;
             return;
         }
+
 
         isBonemealing = true;
         Rotations.rotate(Rotations.getYaw(crop), Rotations.getPitch(crop), () -> {

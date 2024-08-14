@@ -18,60 +18,59 @@ public class ChatEncryption extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<String> key = sgGeneral.add(new StringSetting.Builder()
-            .name("密钥")
-            .description("用于加密和解密消息的密钥。")
-            .defaultValue("81")
-            .build()
+        .name("key")
+        .description("What key is used to encrypt and decrypt messages.")
+        .defaultValue("81")
+        .build()
     );
 
     private final Setting<String> secretKey = sgGeneral.add(new StringSetting.Builder()
-            .name("秘密密钥")
-            .description("确保安全的辅助密钥。")
-            .defaultValue("🔑")
-            .build()
+        .name("secret-key")
+        .description("A secondary key to ensure safety.")
+        .defaultValue("🔑")
+        .build()
     );
 
     private final Setting<String> encryptionPrefix = sgGeneral.add(new StringSetting.Builder()
-            .name("加密前缀")
-            .description("用于加密消息的前缀。")
-            .defaultValue("!enc:")
-            .build()
+        .name("encryption-prefix")
+        .description("What is used as prefix to encrypt messages.")
+        .defaultValue("!enc:")
+        .build()
     );
 
     private final Setting<String> decryptionPrefix = sgGeneral.add(new StringSetting.Builder()
-            .name("解密前缀")
-            .description("用于解密消息的前缀。")
-            .defaultValue("!dnc:")
-            .build()
+        .name("encryption-prefix")
+        .description("What is used as prefix to decrypt messages.")
+        .defaultValue("!dnc:")
+        .build()
     );
 
     private final Setting<Boolean> alwaysEncrypt = sgGeneral.add(new BoolSetting.Builder()
-            .name("始终加密")
-            .description("自动始终加密您的消息。")
-            .defaultValue(false)
-            .build()
+        .name("always-encrypt")
+        .description("Always encrypts your messages automatically.")
+        .defaultValue(false)
+        .build()
     );
 
     private final Setting<Integer> wrapLength = sgGeneral.add(new IntSetting.Builder()
-            .name("换行长度")
-            .description("每行可以容纳多少个字符。")
-            .defaultValue(50)
-            .sliderMin(40)
-            .sliderMax(75)
-            .min(1)
-            .max(256)
-            .noSlider()
-            .build()
+        .name("wrap-length")
+        .description("How many characters to fit in one line.")
+        .defaultValue(50)
+        .sliderMin(40)
+        .sliderMax(75)
+        .min(1)
+        .max(256)
+        .noSlider()
+        .build()
     );
-
     public final Setting<SettingColor> feedbackColor = sgGeneral.add(new ColorSetting.Builder()
-            .name("反馈颜色")
-            .description("反馈文本的颜色。")
-            .defaultValue(new SettingColor(146,188,98))
-            .build());
+        .name("feedback-color")
+        .description("Color of the feedback text.")
+        .defaultValue(new SettingColor(146,188,98))
+        .build());
 
     public ChatEncryption() {
-        super(NumbyHack.CATEGORY, "chat-encryption", "加密您的聊天消息，使其对其他人不可读。");
+        super(NumbyHack.CATEGORY, "chat-encryption", "Encrypts your chat messages to make them unreadable to other people.");
     }
 
     @EventHandler
@@ -97,7 +96,7 @@ public class ChatEncryption extends Module {
                         encrypted = CHMainUtils.encrypt(toEncrypt.concat(secretKey.get()), key.get());
                     } catch (Exception exception) {
                         exception.printStackTrace();
-                        warning("加密失败: " + exception + " 异常。");
+                        warning("Encryption failed: " + exception + " Exception.");
 
                         return string;
                     }
@@ -106,7 +105,7 @@ public class ChatEncryption extends Module {
                 }
 
                 if (string.length() > 256) {
-                    warning("加密后的字符串超过256个字符。无法加密。");
+                    warning("The encrypted string is above 256 characters. Unable to encrypt.");
 
                     return string;
                 }
@@ -114,7 +113,7 @@ public class ChatEncryption extends Module {
                 return string;
             } catch (Exception exception) {
                 exception.printStackTrace();
-                warning("加密失败: 无效格式导致的 " + exception + " 异常。");
+                warning("Encryption failed: Invalid format caused a " + exception + " Exception.");
 
                 return string;
             }
@@ -136,7 +135,7 @@ public class ChatEncryption extends Module {
         String original = builder.toString();
 
         if (string.contains(decryptionPrefix.get()) && string.contains(";") && string.indexOf(decryptionPrefix.get()) < string.indexOf(";", string.indexOf(decryptionPrefix.get()))) {
-            try {
+            try{
                 int index;
 
                 while ((index = string.indexOf(decryptionPrefix.get())) != -1) {
@@ -151,7 +150,7 @@ public class ChatEncryption extends Module {
                         decrypted = decrypted.substring(0, decrypted.length() - secretKey.get().length());
                     } catch (Exception exception) {
                         exception.printStackTrace();
-                        warning("解密失败: " + exception + " 异常。");
+                        warning("Decryption failed: " + exception + " Exception.");
 
                         return;
                     }
@@ -168,7 +167,7 @@ public class ChatEncryption extends Module {
                         i++;
 
                         if (i > wrapLength.get()) {
-                            wrap.append("\\n");
+                            wrap.append("\n");
                             i = 0;
                         }
 
@@ -176,16 +175,16 @@ public class ChatEncryption extends Module {
                     }
                 }
 
-                event.setMessage(Text.literal(string + " ").append(Text.literal("[加密]")
-                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(feedbackColor.get().getPacked()))
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(wrap.toString())
-                                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(feedbackColor.get().getPacked())))
-                                ))
-                        )
+                event.setMessage(Text.literal(string + " ").append(Text.literal("[Encrypted]")
+                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(feedbackColor.get().getPacked()))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(wrap.toString())
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(feedbackColor.get().getPacked())))
+                        ))
+                    )
                 ));
             } catch (Exception exception) {
                 exception.printStackTrace();
-                warning("解密失败: 无效格式导致的 " + exception + " 异常");
+                warning("Decryption failed: Invalid format caused a " + exception + " Exception");
             }
         }
     }

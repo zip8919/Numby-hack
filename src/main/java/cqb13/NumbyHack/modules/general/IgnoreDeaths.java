@@ -17,28 +17,28 @@ public class IgnoreDeaths extends Module {
 
     private final Setting<List<String>> names = sgGeneral.add(new StringListSetting.Builder()
             .name("player names")
-            .description("要隐藏死亡消息的玩家名称。")
+            .description("The names of players who's death messages you wish to hide.")
             .defaultValue(List.of())
             .build()
     );
 
     private final Setting<Boolean> mustContainWords = sgGeneral.add(new BoolSetting.Builder()
-            .name("必须包含单词")
-            .description("仅在消息包含指定单词和玩家名称时才会忽略该消息。")
+            .name("must contain words")
+            .description("Will only  ignore the message if it contains specified words and player name.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<List<String>> blockedWords = sgGeneral.add(new StringListSetting.Builder()
-            .name("被阻止的单词")
-            .description("将导致消息被阻止的单词列表。")
+            .name("blocked words")
+            .description("The list of words that will be cause a message to be blocked.")
             .defaultValue(List.of())
             .visible(mustContainWords::get)
             .build()
     );
 
     public IgnoreDeaths() {
-        super(NumbyHack.CATEGORY, "ignore-deaths", "从聊天中移除包含死亡玩家名称的消息。");
+        super(NumbyHack.CATEGORY, "ignore-deaths", "Removes chat messages containing a death spammers name from chat.");
     }
 
     @EventHandler

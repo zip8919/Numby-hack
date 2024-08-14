@@ -17,22 +17,22 @@ public class Beyblade extends Module {
     private final SettingGroup sgDefault = settings.getDefaultGroup();
 
     private final Setting<Mode> antiDesync = sgDefault.add(new EnumSetting.Builder<Mode>()
-            .name("防止不同步")
-            .description("在某些触发器上停止旋转。")
+            .name("anti-desync")
+            .description("Stops spinning on some triggers.")
             .defaultValue(Mode.All)
             .build()
     );
 
     private final Setting<Boolean> yaw = sgDefault.add(new BoolSetting.Builder()
-            .name("偏航")
-            .description("围绕Y轴旋转。")
+            .name("yaw")
+            .description("Spin around.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Integer> ySpeed = sgDefault.add(new IntSetting.Builder()
-            .name("偏航速度")
-            .description("旋转的速度。")
+            .name("yaw-speed")
+            .description("The speed at which you rotate.")
             .defaultValue(5)
             .range(1, 100)
             .visible(yaw::get)
@@ -40,15 +40,15 @@ public class Beyblade extends Module {
     );
 
     private final Setting<Boolean> pitch = sgDefault.add(new BoolSetting.Builder()
-            .name("俯仰")
-            .description("围绕X轴旋转。")
+            .name("pitch")
+            .description("Spin around.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Integer> pSpeed = sgDefault.add(new IntSetting.Builder()
-            .name("速度")
-            .description("旋转的速度。")
+            .name("speed")
+            .description("The speed at which you rotate.")
             .defaultValue(5)
             .range(1, 100)
             .visible(pitch::get)
@@ -56,7 +56,7 @@ public class Beyblade extends Module {
     );
 
     public Beyblade() {
-        super(NumbyHack.CATEGORY, "Beyblade", "尝试旋转你。");
+        super(NumbyHack.CATEGORY, "Beyblade", "Tries to rotate you.");
     }
 
     private short count = 0;

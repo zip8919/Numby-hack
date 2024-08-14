@@ -32,38 +32,38 @@ public class LogOutSpots extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgRender = settings.createGroup("Render");
 
-    // 通用设置
+    // General
     private final Setting<Boolean> nameRender = sgGeneral.add(new BoolSetting.Builder()
             .name("name")
-            .description("显示玩家的名字。")
+            .description("Shows the name of the player.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> healthRender = sgGeneral.add(new BoolSetting.Builder()
             .name("health")
-            .description("显示玩家的生命值。")
+            .description("Shows the health of the player.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> coordRender = sgGeneral.add(new BoolSetting.Builder()
             .name("coordinates")
-            .description("显示玩家的坐标。")
+            .description("Shows the coordinates of the player.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> armorCheck = sgGeneral.add(new BoolSetting.Builder()
             .name("armor-check")
-            .description("检查玩家是否穿戴盔甲。")
+            .description("Checks if the player has armor on.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
             .name("scale")
-            .description("文本的缩放比例。")
+            .description("The scale of the text.")
             .defaultValue(1)
             .min(0.2)
             .sliderRange(0.2, 2)
@@ -72,43 +72,43 @@ public class LogOutSpots extends Module {
 
     private final Setting<Boolean> notification = sgGeneral.add(new BoolSetting.Builder()
             .name("notification")
-            .description("当玩家下线时通知你。")
+            .description("Notifies you when a player logs out.")
             .defaultValue(true)
             .build()
     );
 
-    // 渲染设置
+    // Render
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
             .name("shape-mode")
-            .description("形状类型。")
+            .description("The shape.")
             .defaultValue(ShapeMode.Both)
             .build()
     );
 
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
             .name("side-color")
-            .description("侧面颜色。")
-            .defaultValue(new SettingColor(146, 188, 98, 10))
-            .build()
+            .description("The side color.")
+            .defaultValue(new SettingColor(146,188,98, 10)).
+            build()
     );
 
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
             .name("line-color")
-            .description("线条颜色。")
-            .defaultValue(new SettingColor(146, 188, 98, 255))
+            .description("The line color.")
+            .defaultValue(new SettingColor(146,188,98, 255))
             .build()
     );
 
     private final Setting<SettingColor> nameColor = sgRender.add(new ColorSetting.Builder()
             .name("name-color")
-            .description("名字颜色。")
+            .description("The name color.")
             .defaultValue(new SettingColor(255, 255, 255))
             .build()
     );
 
     private final Setting<SettingColor> nameBackgroundColor = sgRender.add(new ColorSetting.Builder()
             .name("name-background-color")
-            .description("名字背景颜色。")
+            .description("The name background color.")
             .defaultValue(new SettingColor(0, 0, 0, 75))
             .build()
     );
@@ -122,7 +122,7 @@ public class LogOutSpots extends Module {
     private Dimension lastDimension;
 
     public LogOutSpots() {
-        super(NumbyHack.CATEGORY, "log-spots-+", "显示其他玩家下线时的位置框。");
+        super(NumbyHack.CATEGORY, "log-spots-+", "Displays a box where another player has logged out at.");
         lineColor.onChanged();
     }
 
@@ -208,7 +208,7 @@ public class LogOutSpots extends Module {
         players.add(entry);
     }
 
-    private ItemStack getItem(int i, PlayerEntity playerEntity) {
+    private ItemStack getItem(int i,  PlayerEntity playerEntity) {
         if (playerEntity == null) return ItemStack.EMPTY;
 
         return switch (i) {
@@ -243,6 +243,7 @@ public class LogOutSpots extends Module {
         PlayerEntity entity;
 
         public Entry(PlayerEntity entity) {
+
             passed.reset();
             halfWidth = entity.getWidth() / 2;
             x = entity.getX() - halfWidth;
@@ -280,18 +281,18 @@ public class LogOutSpots extends Module {
 
             String content = "";
             if (nameRender.get()) content = content + name;
-            if (healthRender.get()) content = content + " " + healthText + "HP";
-            if (coordRender.get()) content = content + " (" + Math.round(entity.getX()) + " " + Math.round(entity.getY()) + " " + Math.round(entity.getZ()) + ")";
+            if (healthRender.get()) content = content + " "+ healthText + "HP";
+            if (coordRender.get()) content = content + " ("+ Math.round(entity.getX()) + " " + Math.round(entity.getY()) + " " + Math.round(entity.getZ()) + ")";
 
-            // 渲染背景
-            double i = text.getWidth(content) / 2;
+            // Render background
+            double i = text.getWidth(content)/2;
             Renderer2D.COLOR.begin();
             Renderer2D.COLOR.quad(-i, 0, i * 2, text.getHeight(), nameBackgroundColor.get());
             Renderer2D.COLOR.render(null);
 
-            // 渲染名字和生命值文本
+            // Render name and health texts
             text.beginBig();
-            if (nameRender.get()) text.render(content, -i, 0, nameColor.get());
+            if (nameRender.get())text.render(content, -i, 0, nameColor.get());
             text.end();
 
             NametagUtils.end();

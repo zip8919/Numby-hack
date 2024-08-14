@@ -27,23 +27,23 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * 基于 Tanuki
+ * based on Tanuki
  */
 public class SafetyNet extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
-    private final SettingGroup sgRender = settings.createGroup("渲染");
+    private final SettingGroup sgRender = settings.createGroup("Render");
 
-    // 安全网
+    // safety net
     private final Setting<SafetyNet.PlaceMode> safetyMode = sgGeneral.add(new EnumSetting.Builder<SafetyNet.PlaceMode>()
-            .name("安全模式")
-            .description("使用哪种安全模式。")
+            .name("safetynet")
+            .description("Which safety mode to use.")
             .defaultValue(PlaceMode.SafetyNet)
             .build()
     );
 
     private final Setting<Integer> yLock = sgGeneral.add(new IntSetting.Builder()
-            .name("安全网高度")
-            .description("安全网的Y级别。")
+            .name("safetynet level")
+            .description("The Y level of the safety net.")
             .min(1)
             .max(255)
             .sliderMin(1)
@@ -53,8 +53,8 @@ public class SafetyNet extends Module {
     );
 
     private final Setting<Integer> safetyNetWindow = sgGeneral.add(new IntSetting.Builder()
-            .name("安全网窗口")
-            .description("从Y级别锁定开始的激活窗口+Y。")
+            .name("safetynet-window")
+            .description("The activation window +Y from Y level lock.")
             .min(1)
             .max(32)
             .sliderMin(1)
@@ -64,8 +64,8 @@ public class SafetyNet extends Module {
     );
 
     private final Setting<Double> safetyNetMultiplier = sgGeneral.add(new DoubleSetting.Builder()
-            .name("Y减速乘数")
-            .description("Y速度减速乘数。")
+            .name("y-slowdown-multiplier")
+            .description("Y velocity slowdown multiplier.")
             .min(0.1)
             .max(0.99)
             .sliderMin(0.1)
@@ -74,59 +74,62 @@ public class SafetyNet extends Module {
             .build()
     );
 
-    // 通用
+
+    // general
+
     private final Setting<Boolean> autoSwitch = sgGeneral.add(new BoolSetting.Builder()
-            .name("自动切换")
-            .description("在放置之前自动切换到方块。")
+            .name("auto-switch")
+            .description("Automatically swaps to a block before placing.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> renderSwing = sgGeneral.add(new BoolSetting.Builder()
-            .name("摆动")
-            .description("渲染客户端摆动。")
+            .name("swing")
+            .description("Renders your client-side swing.")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> rotate = sgGeneral.add(new BoolSetting.Builder()
-            .name("旋转")
-            .description("旋转到正在放置的方块。")
+            .name("rotate")
+            .description("Rotates towards the blocks being placed.")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<List<Block>> blocks = sgGeneral.add(new BlockListSetting.Builder()
-            .name("方块")
-            .description("选定的方块。")
+            .name("blocks")
+            .description("Selected blocks.")
             .build()
     );
 
     private final Setting<SafetyNet.ListMode> blocksFilter = sgGeneral.add(new EnumSetting.Builder<SafetyNet.ListMode>()
-            .name("方块过滤器")
-            .description("如何使用方块列表设置")
+            .name("blocks-filter")
+            .description("How to use the block list setting")
             .defaultValue(SafetyNet.ListMode.Blacklist)
             .build()
     );
 
-    // 渲染
+    // Render
+
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-            .name("形状模式")
-            .description("形状的渲染方式。")
+            .name("shape-mode")
+            .description("How the shapes are rendered.")
             .defaultValue(ShapeMode.Both)
             .build()
     );
 
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-            .name("侧面颜色")
-            .description("目标方块渲染的侧面颜色。")
+            .name("side-color")
+            .description("The side color of the target block rendering.")
             .defaultValue(new SettingColor(146,188,98, 75))
             .build()
     );
 
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-            .name("线条颜色")
-            .description("目标方块渲染的线条颜色。")
+            .name("line-color")
+            .description("The line color of the target block rendering.")
             .defaultValue(new SettingColor(146,188,98, 255))
             .build()
     );
@@ -142,7 +145,7 @@ public class SafetyNet extends Module {
     private double placeRange = 4;
 
     public SafetyNet() {
-        super(NumbyHack.CATEGORY, "safety-net", "在设定的 Y 水平线上，在你的下方放置一个木块。");
+        super(NumbyHack.CATEGORY, "safety-net", "Places a block under you at a set Y level.");
     }
 
     @Override
