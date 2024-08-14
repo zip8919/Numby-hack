@@ -9,7 +9,7 @@ import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import net.minecraft.util.Identifier;
-
+//test
 public class Logo extends HudElement {
     public static final HudElementInfo<Logo> INFO = new HudElementInfo<>(NumbyHack.HUD_GROUP, "logo", "Shows the Numby Hack logo in the HUD.", Logo::new);
 
