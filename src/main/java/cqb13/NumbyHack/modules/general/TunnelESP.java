@@ -1,4 +1,5 @@
 package cqb13.NumbyHack.modules.general;
+
 import cqb13.NumbyHack.NumbyHack;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
@@ -16,20 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * made by cqb13
+ * 由 cqb13 制作
  */
 public class TunnelESP extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     public final Setting<SettingColor> color = sgGeneral.add(new ColorSetting.Builder()
-            .name("color")
+            .name("颜色")
             .description("")
             .defaultValue(new SettingColor(146,188,98, 255))
             .build()
     );
 
     private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
-            .name("delay")
-            .description("delay")
+            .name("延迟")
+            .description("延迟")
             .defaultValue(1)
             .min(0)
             .sliderMax(20)
@@ -37,7 +38,7 @@ public class TunnelESP extends Module {
     );
 
     private final Setting<Integer> range = sgGeneral.add(new IntSetting.Builder()
-            .name("range").description("Range")
+            .name("范围").description("范围")
             .defaultValue(50)
             .min(0)
             .sliderMax(150)
@@ -49,7 +50,7 @@ public class TunnelESP extends Module {
     private double[] rPos;
 
     public TunnelESP() {
-        super(NumbyHack.CATEGORY, "tunnel-esp", "Broken don't use! (meteor has it, this one was first)");
+        super(NumbyHack.CATEGORY, "隧道ESP", "已损坏，请勿使用！（流星中已有此功能，此版本为最初版本）");
     }
 
     @EventHandler

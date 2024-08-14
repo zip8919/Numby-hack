@@ -8,6 +8,7 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.Utils;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
+import meteordevelopment.meteorclient.utils.math.BlockPos;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -15,7 +16,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * from Tanuki
+ * 从 Tanuki 模块改编
  */
 // https://gitlab.com/Walaryne/tanuki/-/blob/master/src/main/java/minegame159/meteorclient/modules/misc/EgapFinder.java
 
@@ -32,21 +32,21 @@ public class TanukiEgapFinder extends Module {
 
     private final Setting<Boolean> coords = sgDefault.add(new BoolSetting.Builder()
             .name("coords")
-            .description("Sends the coords in the message in case you're lazy to look at your .minecraft folder.")
+            .description("在消息中发送坐标，以防你懒得查看你的 .minecraft 文件夹。")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> debug = sgDefault.add(new BoolSetting.Builder()
             .name("debug")
-            .description("Useless. Just prints info about every chest it locates in your render distance, will spam chat a lot.")
+            .description("无用。只是打印出它检测到的每个箱子信息，会在聊天中大量刷屏。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> playSound = sgDefault.add(new BoolSetting.Builder()
             .name("play-sound")
-            .description("Plays a sound when you find an egap.")
+            .description("当你找到一个 egap 时播放声音。")
             .defaultValue(false)
             .build()
     );
@@ -60,7 +60,7 @@ public class TanukiEgapFinder extends Module {
     private BlockPos prevChest;
 
     public TanukiEgapFinder() {
-        super(NumbyHack.CATEGORY, "egap-finder", "Finds Egaps in a SP world and creates a file called \"egap-coords.txt\".");
+        super(NumbyHack.CATEGORY, "egap-finder", "在 SP 世界中寻找 Egaps 并创建一个名为 \\"egap-coords.txt\\" 的文件。");
     }
 
     private static void writeToFile(String coords) {
@@ -78,12 +78,12 @@ public class TanukiEgapFinder extends Module {
         stage = 0;
         checkDelay = 0;
         lock = true;
-        if (debug.get()) ChatUtils.info("STARTING");
+        if (debug.get()) ChatUtils.info("开始");
     }
 
     @Override
     public void onDeactivate() {
-        if (debug.get()) ChatUtils.info("STOPPING");
+        if (debug.get()) ChatUtils.info("停止");
     }
 
     @EventHandler
@@ -118,7 +118,7 @@ public class TanukiEgapFinder extends Module {
                 case 1: {
                     int adjacent = chest.getX() - 1;
                     Block block = mc.world.getBlockState(chest.add(-1, 0, 0)).getBlock();
-                    if (block != Blocks.COMPARATOR) {;
+                    if (block != Blocks.COMPARATOR) {
                         ChatUtils.sendPlayerMsg("/setblock " + adjacent + " " + chest.getY() + " " + chest.getZ() + " minecraft:comparator[facing=east]");
                     }
                     stage++;
@@ -141,7 +141,7 @@ public class TanukiEgapFinder extends Module {
                 case 3: {
                     Block block = mc.world.getBlockState(chest).getBlock();
                     if (block == Blocks.CHEST) {
-                        ChatUtils.sendPlayerMsg("/execute if data block " + chest.getX() + " " + chest.getY() + " " + chest.getZ() + " Items[{id:\"minecraft:enchanted_golden_apple\"}] as @p run setblock " + chest.getX() + " " + chest.getY() + " " + chest.getZ() + " minecraft:diamond_block");
+                        ChatUtils.sendPlayerMsg("/execute if data block " + chest.getX() + " " + chest.getY() + " " + chest.getZ() + " Items[{id:\\"minecraft:enchanted_golden_apple\\"}] as @p run setblock " + chest.getX() + " " + chest.getY() + " " + chest.getZ() + " minecraft:diamond_block");
                     }
                     prevChest = chest;
                     stage++;
@@ -151,7 +151,7 @@ public class TanukiEgapFinder extends Module {
                     Block diamondPos = mc.world.getBlockState(prevChest).getBlock();
                     if (diamondPos == Blocks.DIAMOND_BLOCK) {
                         if (playSound.get()) mc.player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-                        ChatUtils.info((!coords.get() ? Formatting.GREEN + "Found an egap! Wrote coords to file." : Formatting.GREEN + "Found an egap! Wrote coords to file. " + prevChest.getX() + " " + prevChest.getY() + " " + prevChest.getZ()));
+                        ChatUtils.info((!coords.get() ? Formatting.GREEN + "找到一个 egap！已将坐标写入文件。" : Formatting.GREEN + "找到一个 egap！已将坐标写入文件。 " + prevChest.getX() + " " + prevChest.getY() + " " + prevChest.getZ()));
                         writeToFile(prevChest.getX() + " " + prevChest.getY() + " " + prevChest.getZ());
                     } else
                         ChatUtils.sendPlayerMsg("/setblock " + chest.getX() + " " + chest.getY() + " " + chest.getZ() + " minecraft:air");

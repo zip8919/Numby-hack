@@ -15,58 +15,58 @@ import net.minecraft.item.*;
 import java.util.*;
 
 public class ItemCounter extends HudElement {
-    public static final HudElementInfo<ItemCounter> INFO = new HudElementInfo<>(NumbyHack.HUD_GROUP, "item-counter", "Count different items in text.", ItemCounter::new);
+    public static final HudElementInfo<ItemCounter> INFO = new HudElementInfo<>(NumbyHack.HUD_GROUP, "item-counter", "在文本中统计不同的物品。", ItemCounter::new);
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
-    private final SettingGroup sgRender = settings.createGroup("Render");
-    private final SettingGroup sgScale = settings.createGroup("Scale");
+    private final SettingGroup sgRender = settings.createGroup("渲染");
+    private final SettingGroup sgScale = settings.createGroup("缩放");
 
     public enum SortMode {
-        Longest,
-        Shortest
+        最长,
+        最短
     }
 
-    // General
+    // 通用
     private final Setting<SortMode> sortMode = sgGeneral.add(new EnumSetting.Builder<SortMode>()
-            .name("sort-mode")
-            .description("How to sort the item list.")
-            .defaultValue(SortMode.Shortest)
+            .name("排序模式")
+            .description("如何排序物品列表。")
+            .defaultValue(SortMode.最短)
             .build()
     );
 
     private final Setting<List<Item>> items = sgGeneral.add(new ItemListSetting.Builder()
-            .name("items")
-            .description("Which items to display in the counter list.")
+            .name("物品")
+            .description("在计数器列表中显示哪些物品。")
             .defaultValue(new ArrayList<>(0))
             .build()
     );
 
-    // Render
+    // 渲染
     private final Setting<Boolean> shadow = sgRender.add(new BoolSetting.Builder()
-            .name("shadow")
-            .description("Renders shadow behind text.")
+            .name("阴影")
+            .description("在文本后面渲染阴影。")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Alignment> alignment = sgRender.add(new EnumSetting.Builder<Alignment>()
-            .name("alignment")
-            .description("Horizontal alignment.")
+            .name("对齐")
+            .description("水平对齐。")
             .defaultValue(Alignment.Auto)
             .build()
     );
 
-    // Scale
+    // 缩放
     private final Setting<Boolean> customScale = sgScale.add(new BoolSetting.Builder()
-            .name("custom-scale")
-            .description("Applies custom text scale rather than the global one.")
+            .name("自定义缩放")
+            .description("应用自定义文本缩放而不是全局缩放。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Double> scale = sgScale.add(new DoubleSetting.Builder()
-            .name("scale")
-            .description("Custom scale.")
+            .name("缩放")
+            .description("自定义缩放。")
             .visible(customScale::get)
             .defaultValue(1)
             .min(0.5)
@@ -77,7 +77,6 @@ public class ItemCounter extends HudElement {
     public ItemCounter() {
         super(INFO);
     }
-
 
     private final ArrayList<String> itemCounter = new ArrayList<>();
 
@@ -92,7 +91,7 @@ public class ItemCounter extends HudElement {
         int i = 0;
 
         if (itemCounter.isEmpty()) {
-            String t = "Item Counter";
+            String t = "物品计数器";
             width = Math.max(width, renderer.textWidth(t));
             height += renderer.textHeight();
         } else {
@@ -117,10 +116,10 @@ public class ItemCounter extends HudElement {
         int i = 0;
 
         if (itemCounter.isEmpty()) {
-            String text = "Item Counter:";
-                renderer.text(text, x + alignX(renderer.textWidth(text, shadow.get(), getScale()), alignment.get()), y, TextHud.getSectionColor(0), shadow.get(), getScale());
+            String text = "物品计数器:";
+            renderer.text(text, x + alignX(renderer.textWidth(text, shadow.get(), getScale()), alignment.get()), y, TextHud.getSectionColor(0), shadow.get(), getScale());
         } else {
-            for (String counter: itemCounter) {
+            for (String counter : itemCounter) {
                 renderer.text(counter, x + alignX(renderer.textWidth(counter, shadow.get(), getScale()), alignment.get()), y, TextHud.getSectionColor(0), shadow.get(), getScale());
                 y += renderer.textHeight();
                 if (i > 0) y += 2;
@@ -137,9 +136,9 @@ public class ItemCounter extends HudElement {
         items.get().sort(Comparator.comparingDouble(value -> getName(value).length()));
 
         itemCounter.clear();
-        for (Item item: items.get()) itemCounter.add(getName(item) + ": " + InvUtils.find(item).count());
+        for (Item item : items.get()) itemCounter.add(getName(item) + ": " + InvUtils.find(item).count());
 
-        if (sortMode.get().equals(SortMode.Shortest)) {
+        if (sortMode.get().equals(SortMode.最短)) {
             itemCounter.sort(Comparator.comparing(String::length));
         } else {
             itemCounter.sort(Comparator.comparing(String::length).reversed());
@@ -147,14 +146,14 @@ public class ItemCounter extends HudElement {
     }
 
     public static String getName(Item item) {
-        if (item instanceof BedItem) return "Beds";
-        if (item instanceof ExperienceBottleItem) return "XP Bottles";
-        if (item instanceof EndCrystalItem) return "Crystals";
-        if (item instanceof EnderPearlItem) return "Pearls";
-        if (item == Items.ENCHANTED_GOLDEN_APPLE) return "Gapples";
-        if (item == Items.TOTEM_OF_UNDYING) return "Totems";
-        if (item == Items.ENDER_CHEST) return "Echests";
-        if (item == Items.OBSIDIAN) return "Obby";
+        if (item instanceof BedItem) return "床";
+        if (item instanceof ExperienceBottleItem) return "经验瓶";
+        if (item instanceof EndCrystalItem) return "末影水晶";
+        if (item instanceof EnderPearlItem) return "末影珍珠";
+        if (item == Items.ENCHANTED_GOLDEN_APPLE) return "附魔金苹果";
+        if (item == Items.TOTEM_OF_UNDYING) return "不死图腾";
+        if (item == Items.ENDER_CHEST) return "末地箱子";
+        if (item == Items.OBSIDIAN) return "黑曜石";
         return Names.get(item);
     }
 }
