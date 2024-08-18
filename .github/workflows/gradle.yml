@@ -29,8 +29,8 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "1.21-build-${{ github.run_number }}"
+          automatic_release_tag: "1.20.6-build-${{ github.run_number }}"
           prerelease: false
-          title: "1.21 Build ${{ github.run_number }}"
+          title: "1.20.6 Build ${{ github.run_number }}"
           files: |
             ./build/libs/*.jar
