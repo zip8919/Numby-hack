@@ -3,7 +3,7 @@
   "id": "numbyhack",
   "version": "${version}",
   "name": "Numby Hack",
-  "description": "A simple Meteor addon focused on giving users more customization options. Made in honor of Number81.翻译：zip8919",
+  "description": "一个简单的 Meteor 插件，旨在为用户提供更多自定义选项。由 Number81 制作。汉化：zip8919，请配合彗星中文版使用！",
   "authors": [
     "cqb13"
   ],
