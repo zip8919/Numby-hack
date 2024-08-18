@@ -10,13 +10,13 @@ import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class Keys extends HudElement {
-    public static final HudElementInfo<Keys> INFO = new HudElementInfo<>(NumbyHack.HUD_GROUP, "Keys", "Draws current movement keys", Keys::new);
+    public static final HudElementInfo<Keys> INFO = new HudElementInfo<>(NumbyHack.HUD_GROUP, "Keys", "绘制当前移动按键", Keys::new);
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-            .name("Renderer scale")
-            .description("Scale to render at")
+            .name("渲染器缩放")
+            .description("渲染时的缩放比例")
             .defaultValue(1)
             .range(0, 5)
             .sliderRange(0, 5)
@@ -24,21 +24,21 @@ public class Keys extends HudElement {
     );
 
     private final Setting<SettingColor> textcolor = sgGeneral.add(new ColorSetting.Builder()
-            .name("Text color")
+            .name("文本颜色")
             .description(".")
-            .defaultValue(new SettingColor(146,188,98, 155))
+            .defaultValue(new SettingColor(146, 188, 98, 155))
             .build()
     );
 
     private final Setting<Boolean> shadow = sgGeneral.add(new BoolSetting.Builder()
-            .name("Text shadow")
-            .description("Should the text have a shadow")
+            .name("文本阴影")
+            .description("文本是否应该有阴影")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<drawMode> drawingMode = sgGeneral.add(new EnumSetting.Builder<drawMode>()
-            .name("Draw mode")
+            .name("绘制模式")
             .description(".")
             .defaultValue(drawMode.Basic)
             .build()

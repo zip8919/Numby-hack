@@ -17,50 +17,50 @@ import net.minecraft.util.math.BlockPos;
 
 public class BetterPlace extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
-    private final SettingGroup sgRange = settings.createGroup("Range");
+    private final SettingGroup sgRange = settings.createGroup("范围");
 
-    // General
+    // 一般设置
 
     private final Setting<Boolean> render = sgGeneral.add(new BoolSetting.Builder()
-            .name("render")
-            .description("Renders a block overlay where the block will be placed.")
+            .name("渲染")
+            .description("在将要放置的方块位置渲染一个覆盖层。")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<ShapeMode> shapeMode = sgGeneral.add(new EnumSetting.Builder<ShapeMode>()
-            .name("shape-mode")
-            .description("How the shapes are rendered.")
+            .name("形状模式")
+            .description("形状的渲染方式。")
             .defaultValue(ShapeMode.Both)
             .build()
     );
 
     private final Setting<SettingColor> sideColor = sgGeneral.add(new ColorSetting.Builder()
-            .name("side-color")
-            .description("The color of the sides of the blocks being rendered.")
-            .defaultValue(new SettingColor(146,188,98, 75))
+            .name("侧面颜色")
+            .description("渲染方块侧面的颜色。")
+            .defaultValue(new SettingColor(146, 188, 98, 75))
             .build()
     );
 
     private final Setting<SettingColor> lineColor = sgGeneral.add(new ColorSetting.Builder()
-            .name("line-color")
-            .description("The color of the lines of the blocks being rendered.")
-            .defaultValue(new SettingColor(146,188,98, 255))
+            .name("线条颜色")
+            .description("渲染方块线条的颜色。")
+            .defaultValue(new SettingColor(146, 188, 98, 255))
             .build()
     );
 
-    // Range
+    // 范围设置
 
     private final Setting<Boolean> customRange = sgRange.add(new BoolSetting.Builder()
-            .name("custom-range")
-            .description("Use custom range for better place.")
+            .name("自定义范围")
+            .description("使用自定义范围以更好地放置方块。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Double> range = sgRange.add(new DoubleSetting.Builder()
-            .name("range")
-            .description("Custom range to place at.")
+            .name("范围")
+            .description("放置方块的自定义范围。")
             .visible(customRange::get)
             .defaultValue(5)
             .min(0)
@@ -71,7 +71,7 @@ public class BetterPlace extends Module {
     private HitResult hitResult;
 
     public BetterPlace() {
-        super(NumbyHack.CATEGORY, "BetterPlace", "Helps you place blocks where you normally can't");
+        super(NumbyHack.CATEGORY, "BetterPlace", "帮助你在通常无法放置方块的地方放置方块");
     }
 
     @EventHandler

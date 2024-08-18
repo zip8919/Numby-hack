@@ -27,42 +27,41 @@ import java.util.Collections;
 import java.util.HashSet;
 
 /*
-    Ported from: https://github.com/BleachDrinker420/BleachHack/blob/master/BleachHack-Fabric-1.16/src/main/java/bleach/hack/module/mods/NewChunks.java
+    移植自: https://github.com/BleachDrinker420/BleachHack/blob/master/BleachHack-Fabric-1.16/src/main/java/bleach/hack/module/mods/NewChunks.java
 */
 public class NewChunks extends Module {
 
-    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+	private final SettingGroup sgGeneral = settings.getDefaultGroup();
 	private final SettingGroup sgRender = settings.createGroup("Render");
 
-	// general
-
+	// 通用设置
 	private final Setting<Boolean> remove = sgGeneral.add(new BoolSetting.Builder()
-        .name("remove")
-        .description("Removes the cached chunks when disabling the module.")
-        .defaultValue(true)
-        .build()
-    );
+			.name("remove")
+			.description("禁用模块时移除缓存的区块。")
+			.defaultValue(true)
+			.build()
+	);
 
-	// render
+	// 渲染设置
 	public final Setting<Integer> renderHeight = sgRender.add(new IntSetting.Builder()
 			.name("render-height")
-			.description("The height at which new chunks will be rendered")
+			.description("新区块渲染的高度")
 			.defaultValue(0)
 			.min(-64)
-			.sliderRange(-64,319)
+			.sliderRange(-64, 319)
 			.build()
 	);
 
 	private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
 			.name("shape-mode")
-			.description("How the shapes are rendered.")
+			.description("形状的渲染方式。")
 			.defaultValue(ShapeMode.Both)
 			.build()
 	);
 
 	private final Setting<SettingColor> newChunksSideColor = sgRender.add(new ColorSetting.Builder()
 			.name("new-chunks-side-color")
-			.description("Color of the chunks that are (most likely) completely new.")
+			.description("完全新区块的侧面颜色。")
 			.defaultValue(new SettingColor(255, 0, 0, 75))
 			.visible(() -> shapeMode.get() == ShapeMode.Sides || shapeMode.get() == ShapeMode.Both)
 			.build()
@@ -70,7 +69,7 @@ public class NewChunks extends Module {
 
 	private final Setting<SettingColor> oldChunksSideColor = sgRender.add(new ColorSetting.Builder()
 			.name("old-chunks-side-color")
-			.description("Color of the chunks that have (most likely) been loaded before.")
+			.description("曾经加载过的区块的侧面颜色。")
 			.defaultValue(new SettingColor(0, 255, 0, 75))
 			.visible(() -> shapeMode.get() == ShapeMode.Sides || shapeMode.get() == ShapeMode.Both)
 			.build()
@@ -78,7 +77,7 @@ public class NewChunks extends Module {
 
 	private final Setting<SettingColor> newChunksLineColor = sgRender.add(new ColorSetting.Builder()
 			.name("new-chunks-line-color")
-			.description("Color of the chunks that are (most likely) completely new.")
+			.description("完全新区块的线条颜色。")
 			.defaultValue(new SettingColor(255, 0, 0, 255))
 			.visible(() -> shapeMode.get() == ShapeMode.Lines || shapeMode.get() == ShapeMode.Both)
 			.build()
@@ -86,20 +85,20 @@ public class NewChunks extends Module {
 
 	private final Setting<SettingColor> oldChunksLineColor = sgRender.add(new ColorSetting.Builder()
 			.name("old-chunks-line-color")
-			.description("Color of the chunks that have (most likely) been loaded before.")
+			.description("曾经加载过的区块的线条颜色。")
 			.defaultValue(new SettingColor(0, 255, 0, 255))
 			.visible(() -> shapeMode.get() == ShapeMode.Lines || shapeMode.get() == ShapeMode.Both)
 			.build()
 	);
 
 	private final Executor taskExecutor = Executors.newSingleThreadExecutor();
-    private final Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
-    private final Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
-    private static final Direction[] searchDirs = new Direction[] { Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.UP };
+	private final Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
+	private final Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
+	private static final Direction[] searchDirs = new Direction[] { Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.UP };
 
-    public NewChunks() {
-        super(NumbyHack.CATEGORY,"new-chunks", "Detects completely new chunks using certain traits of them");
-    }
+	public NewChunks() {
+		super(NumbyHack.CATEGORY, "new-chunks", "使用某些特征检测完全新区块");
+	}
 
 	@Override
 	public void onDeactivate() {
@@ -116,17 +115,21 @@ public class NewChunks extends Module {
 			synchronized (newChunks) {
 				for (ChunkPos c : newChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-						render(new Box(new Vec3d(c.getStartPos().getX(), c.getStartPos().getY()+renderHeight.get(), c.getStartPos().getZ()), new Vec3d(c.getStartPos().getX()+16, c.getStartPos().getY()+renderHeight.get(), c.getStartPos().getZ()+16)), newChunksSideColor.get(), newChunksLineColor.get(), shapeMode.get(), event);
+						render(new Box(new Vec3d(c.getStartPos().getX(), c.getStartPos().getY() + renderHeight.get(), c.getStartPos().getZ()),
+										new Vec3d(c.getStartPos().getX() + 16, c.getStartPos().getY() + renderHeight.get(), c.getStartPos().getZ() + 16)),
+								newChunksSideColor.get(), newChunksLineColor.get(), shapeMode.get(), event);
 					}
 				}
 			}
 		}
 
-		if (oldChunksLineColor.get().a > 5 || oldChunksSideColor.get().a > 5){
+		if (oldChunksLineColor.get().a > 5 || oldChunksSideColor.get().a > 5) {
 			synchronized (oldChunks) {
 				for (ChunkPos c : oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-						render(new Box(new Vec3d(c.getStartPos().getX(), c.getStartPos().getY()+renderHeight.get(), c.getStartPos().getZ()), new Vec3d(c.getStartPos().getX()+16, c.getStartPos().getY()+renderHeight.get(), c.getStartPos().getZ()+16)), oldChunksSideColor.get(), oldChunksLineColor.get(), shapeMode.get(), event);
+						render(new Box(new Vec3d(c.getStartPos().getX(), c.getStartPos().getY() + renderHeight.get(), c.getStartPos().getZ()),
+										new Vec3d(c.getStartPos().getX() + 16, c.getStartPos().getY() + renderHeight.get(), c.getStartPos().getZ() + 16)),
+								oldChunksSideColor.get(), oldChunksLineColor.get(), shapeMode.get(), event);
 					}
 				}
 			}
@@ -134,8 +137,8 @@ public class NewChunks extends Module {
 	}
 
 	private void render(Box box, Color sides, Color lines, ShapeMode shapeMode, Render3DEvent event) {
-			event.renderer.box(
-					box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, sides, lines, shapeMode, 0);
+		event.renderer.box(
+				box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, sides, lines, shapeMode, 0);
 	}
 
 	@EventHandler
@@ -147,7 +150,7 @@ public class NewChunks extends Module {
 				if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
 					ChunkPos chunkPos = new ChunkPos(pos);
 
-					for (Direction dir: searchDirs) {
+					for (Direction dir : searchDirs) {
 						if (mc.world.getBlockState(pos.offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
 							newChunks.add(chunkPos);
 							return;
@@ -163,7 +166,7 @@ public class NewChunks extends Module {
 			if (!packet.getState().getFluidState().isEmpty() && !packet.getState().getFluidState().isStill()) {
 				ChunkPos chunkPos = new ChunkPos(packet.getPos());
 
-				for (Direction dir: searchDirs) {
+				for (Direction dir : searchDirs) {
 					if (mc.world.getBlockState(packet.getPos().offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
 						newChunks.add(chunkPos);
 						return;
@@ -184,7 +187,6 @@ public class NewChunks extends Module {
 				} catch (ArrayIndexOutOfBoundsException e) {
 					return;
 				}
-
 
 				for (int x = 0; x < 16; x++) {
 					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {

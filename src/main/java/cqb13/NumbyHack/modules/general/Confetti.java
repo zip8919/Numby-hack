@@ -9,27 +9,27 @@ import net.minecraft.util.math.Vec3d;
 import cqb13.NumbyHack.NumbyHack;
 
 /**
- * from Tanuki
+ * 来源于 Tanuki
  */
 public class Confetti extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<SettingColor> colorOne = sgGeneral.add(new ColorSetting.Builder()
-            .name("color-one")
-            .description("The first confetti color to change.")
+            .name("颜色一")
+            .description("第一个彩带颜色。")
             .defaultValue(new SettingColor(73, 107, 190, 255))
             .build()
     );
 
     private final Setting<SettingColor> colorTwo = sgGeneral.add(new ColorSetting.Builder()
-            .name("color-two")
-            .description("The second confetti color to change.")
+            .name("颜色二")
+            .description("第二个彩带颜色。")
             .defaultValue(new SettingColor(73, 107, 190, 255))
             .build()
     );
 
     public Confetti() {
-        super(NumbyHack.CATEGORY, "confetti", "Changes the color of the totem pop particles.");
+        super(NumbyHack.CATEGORY, "彩带", "更改图腾弹出粒子的颜色。");
     }
 
     public Vec3d getColorOne() {

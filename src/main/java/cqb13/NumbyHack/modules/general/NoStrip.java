@@ -11,28 +11,29 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+
 /**
- * made by cqb13
+ * 作者: cqb13
  */
 public class NoStrip extends Module {
     private final SettingGroup sgBlocks = settings.createGroup("Blocks");
 
     private final Setting<Boolean> swingHand = sgBlocks.add(new BoolSetting.Builder()
             .name("swing-hand")
-            .description("Renders swing hand animation.")
+            .description("渲染挥手动画。")
             .defaultValue(true)
             .build()
     );
 
     private final Setting<Boolean> chatFeedback = sgBlocks.add(new BoolSetting.Builder()
             .name("chat-feedback")
-            .description("Notifies you in chat when you attempt to strip a log.")
+            .description("当尝试剥离原木时在聊天中通知你。")
             .defaultValue(false)
             .build()
     );
 
     public NoStrip() {
-        super(NumbyHack.CATEGORY, "no-strip", "Prevents you from stripping logs.");
+        super(NumbyHack.CATEGORY, "no-strip", "防止你剥离原木。");
     }
 
     @EventHandler
@@ -47,7 +48,7 @@ public class NoStrip extends Module {
                 String result = Names.get(mc.world.getBlockState(pos).getBlock());
                 if (result.contains("Log")){
                     if (swingHand.get()) mc.player.swingHand(mc.player.getActiveHand());
-                    if (chatFeedback.get()) info("You can't strip logs!");
+                    if (chatFeedback.get()) info("你不能剥离原木！");
                     return false;
                 }
             }

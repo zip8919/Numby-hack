@@ -18,20 +18,20 @@ public class GodBridge extends Module {
     final Direction[] allowedSides = new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
 
     public GodBridge() {
-        super(NumbyHack.CATEGORY, "god-bridge", "Puts you in the right position to god bridge.");
+        super(NumbyHack.CATEGORY, "god-bridge", "让你处于正确的位置以进行神桥建造。");
     }
 
     @Override
     public void onActivate() {
-
+        // 模块激活时的逻辑
     }
 
     @Override
     public void onDeactivate() {
-
+        // 模块停用时的逻辑
     }
 
-    //TODO: make this work
+    // TODO: 使其工作
     @EventHandler
     private void onTick(TickEvent.Pre event) {
         mc.player.setYaw(mc.player.getMovementDirection().asRotation());

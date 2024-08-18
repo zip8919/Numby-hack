@@ -22,102 +22,102 @@ public class ConditionToggle extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> death = sgGeneral.add(new BoolSetting.Builder()
-            .name("death-toggle")
-            .description("Toggles modules when you die.")
+            .name("死亡切换")
+            .description("当你死亡时切换模块。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<List<Module>> deathOnToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-on-on-death")
-            .description("Which modules to activate on death.")
+            .name("死亡时启用的模块")
+            .description("在死亡时激活的模块。")
             .visible(death::get)
             .build()
     );
 
     private final Setting<List<Module>> deathOffToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-off-on-death")
-            .description("Which modules to toggle off on death.")
+            .name("死亡时禁用的模块")
+            .description("在死亡时禁用的模块。")
             .visible(death::get)
             .build()
     );
 
     private final Setting<Boolean> logout = sgGeneral.add(new BoolSetting.Builder()
-            .name("logout-toggle")
-            .description("Toggles modules when you log out.")
+            .name("登出切换")
+            .description("当你登出时切换模块。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<List<Module>> logoutOnToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-on-on-logout")
-            .description("Which modules to activate on logout.")
+            .name("登出时启用的模块")
+            .description("在登出时激活的模块。")
             .visible(logout::get)
             .build()
     );
 
     private final Setting<List<Module>> logoutOffToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-off-on-logout")
-            .description("Which modules to toggle off on logout.")
+            .name("登出时禁用的模块")
+            .description("在登出时禁用的模块。")
             .visible(logout::get)
             .build()
     );
 
     private final Setting<Boolean> damage = sgGeneral.add(new BoolSetting.Builder()
-            .name("damage-toggle")
-            .description("Toggles modules when you take damage.")
+            .name("伤害切换")
+            .description("当你受到伤害时切换模块。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<List<Module>> damageOnToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-on-on-damage")
-            .description("Which modules to activate on damage.")
+            .name("受到伤害时启用的模块")
+            .description("在受到伤害时激活的模块。")
             .visible(damage::get)
             .build()
     );
 
     private final Setting<List<Module>> damageOffToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-off-on-damage")
-            .description("Which modules to toggle off on damage.")
+            .name("受到伤害时禁用的模块")
+            .description("在受到伤害时禁用的模块。")
             .visible(damage::get)
             .build()
     );
 
     private final Setting<Boolean> player = sgGeneral.add(new BoolSetting.Builder()
-            .name("player-toggle")
-            .description("Toggles modules when players enter your render distance.")
+            .name("玩家切换")
+            .description("当玩家进入你的渲染距离时切换模块。")
             .defaultValue(false)
             .build()
     );
 
     private final Setting<Boolean> ignoreFriends = sgGeneral.add(new BoolSetting.Builder()
-            .name("ignore-friends")
-            .description("Ignores friends entering your render distance.")
+            .name("忽略朋友")
+            .description("忽略进入你渲染距离的朋友。")
             .defaultValue(true)
             .visible(player::get)
             .build()
     );
 
     private final Setting<List<Module>> playerOnToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-on-on-player")
-            .description("Which modules to activate on player.")
+            .name("玩家进入时启用的模块")
+            .description("在玩家进入时激活的模块。")
             .visible(player::get)
             .build()
     );
 
     private final Setting<List<Module>> playerOffToggleModules = sgGeneral.add(new ModuleListSetting.Builder()
-            .name("toggle-off-on-player")
-            .description("Which modules to toggle off on player.")
+            .name("玩家进入时禁用的模块")
+            .description("在玩家进入时禁用的模块。")
             .visible(player::get)
             .build()
     );
 
     public ConditionToggle() {
-        super(NumbyHack.CATEGORY, "condition-toggle", "toggles modules based on conditions");
+        super(NumbyHack.CATEGORY, "条件切换", "根据条件切换模块");
     }
 
-    //death toggle
+    // 死亡切换
     @EventHandler
     private void onPacketReceive(PacketEvent.Receive event)  {
         if (event.packet instanceof DeathMessageS2CPacket packet) {
@@ -128,7 +128,7 @@ public class ConditionToggle extends Module {
         }
     }
 
-    //damage toggle
+    // 伤害切换
     @EventHandler
     private void onDamage(DamageEvent event) {
         if (event.entity.getUuid() == null) return;
@@ -139,7 +139,7 @@ public class ConditionToggle extends Module {
         }
     }
 
-    //logout toggle
+    // 登出切换
     @EventHandler
     private void onGameLeft(GameLeftEvent event) {
         if (logout.get()) {
@@ -147,7 +147,7 @@ public class ConditionToggle extends Module {
         }
     }
 
-    //player toggle
+    // 玩家切换
     @EventHandler
     private void onTick(TickEvent.Post event) {
         for (Entity entity : mc.world.getEntities()) {
@@ -166,6 +166,7 @@ public class ConditionToggle extends Module {
             }
         }
     }
+
     private void toggleModules(List<Module> onModules, List<Module> offModules) {
         for (Module module : offModules) {
             if (module.isActive()) {
